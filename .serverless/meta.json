@@ -1,0 +1,2486 @@
+{
+  "C:\\Users\\DELL 7490\\Desktop\\lambda-rds-api\\serverless.yml": {
+    "versionFramework": "4.17.2",
+    "servicePath": "C:\\Users\\DELL 7490\\Desktop\\lambda-rds-api\\serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "node-api-with-s3-layer",
+      "frameworkVersion": "^4.0.0",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs22.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "CreateLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-create"
+              }
+            },
+            "ReadLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-read"
+              }
+            },
+            "UpdateLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-update"
+              }
+            },
+            "DeleteLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-delete"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "node-api-with-s3-layer",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "node-api-with-s3-layer",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "S3libLambdaLayer": {
+              "Type": "AWS::Lambda::LayerVersion",
+              "Properties": {
+                "Content": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                  "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip"
+                },
+                "LayerName": "s3lib",
+                "CompatibleRuntimes": [
+                  "nodejs22.x"
+                ]
+              }
+            },
+            "CreateLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                  "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/create.zip"
+                },
+                "Handler": "functions/create/handler.handler",
+                "Runtime": "nodejs22.x",
+                "FunctionName": "node-api-with-s3-layer-dev-create",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                },
+                "Layers": [
+                  {
+                    "Ref": "S3libLambdaLayer"
+                  }
+                ]
+              },
+              "DependsOn": [
+                "CreateLogGroup"
+              ]
+            },
+            "ReadLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                  "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/read.zip"
+                },
+                "Handler": "functions/read/handler.handler",
+                "Runtime": "nodejs22.x",
+                "FunctionName": "node-api-with-s3-layer-dev-read",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                },
+                "Layers": [
+                  {
+                    "Ref": "S3libLambdaLayer"
+                  }
+                ]
+              },
+              "DependsOn": [
+                "ReadLogGroup"
+              ]
+            },
+            "UpdateLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                  "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/update.zip"
+                },
+                "Handler": "functions/update/handler.handler",
+                "Runtime": "nodejs22.x",
+                "FunctionName": "node-api-with-s3-layer-dev-update",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                },
+                "Layers": [
+                  {
+                    "Ref": "S3libLambdaLayer"
+                  }
+                ]
+              },
+              "DependsOn": [
+                "UpdateLogGroup"
+              ]
+            },
+            "DeleteLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                  "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/delete.zip"
+                },
+                "Handler": "functions/delete/handler.handler",
+                "Runtime": "nodejs22.x",
+                "FunctionName": "node-api-with-s3-layer-dev-delete",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                },
+                "Layers": [
+                  {
+                    "Ref": "S3libLambdaLayer"
+                  }
+                ]
+              },
+              "DependsOn": [
+                "DeleteLogGroup"
+              ]
+            },
+            "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "CreateLambdaFunction"
+                },
+                "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+              }
+            },
+            "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ReadLambdaFunction"
+                },
+                "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+              }
+            },
+            "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "UpdateLambdaFunction"
+                },
+                "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+              }
+            },
+            "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "DeleteLambdaFunction"
+                },
+                "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-node-api-with-s3-layer",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceItems": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "items",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceItemsIdVar": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Ref": "ApiGatewayResourceItems"
+                },
+                "PathPart": "{id}",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodItemsPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceItems"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "CreateLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "CreateLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodItemsGet": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "GET",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceItems"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "ReadLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "ReadLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodItemsIdVarPut": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "PUT",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceItemsIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "UpdateLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "UpdateLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodItemsIdVarDelete": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "DELETE",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceItemsIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "DeleteLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "DeleteLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1754311091601": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodItemsPost",
+                "ApiGatewayMethodItemsGet",
+                "ApiGatewayMethodItemsIdVarPut",
+                "ApiGatewayMethodItemsIdVarDelete"
+              ]
+            },
+            "CreateLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "CreateLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "ReadLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ReadLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "UpdateLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "UpdateLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "DeleteLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "DeleteLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "S3libLambdaLayerQualifiedArn": {
+              "Description": "Current Lambda layer version",
+              "Value": {
+                "Ref": "S3libLambdaLayer"
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerQualifiedArn"
+              }
+            },
+            "S3libLambdaLayerHash": {
+              "Description": "Current Lambda layer hash",
+              "Value": "67b1e6372a715830705bd42ba1e2304e1f2cbdcd",
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerHash"
+              }
+            },
+            "S3libLambdaLayerS3Key": {
+              "Description": "Current Lambda layer S3Key",
+              "Value": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip",
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerS3Key"
+              }
+            },
+            "CreateLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo"
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-CreateLambdaFunctionQualifiedArn"
+              }
+            },
+            "ReadLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE"
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-ReadLambdaFunctionQualifiedArn"
+              }
+            },
+            "UpdateLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw"
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-UpdateLambdaFunctionQualifiedArn"
+              }
+            },
+            "DeleteLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M"
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-DeleteLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-node-api-with-s3-layer-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "package": {
+        "individually": true,
+        "artifactsS3KeyDirname": "serverless/node-api-with-s3-layer/dev/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+        "artifactDirectoryName": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z"
+      },
+      "layers": {
+        "s3lib": {
+          "path": "layers/s3lib",
+          "name": "s3lib",
+          "compatibleRuntimes": [
+            "nodejs22.x"
+          ],
+          "package": {
+            "artifact": "C:\\Users\\DELL 7490\\Desktop\\lambda-rds-api\\.serverless\\s3lib.zip"
+          }
+        }
+      },
+      "functions": {
+        "create": {
+          "handler": "functions/create/handler.handler",
+          "events": [
+            {
+              "http": {
+                "path": "items",
+                "method": "post",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "layers": [
+            {
+              "Ref": "S3libLambdaLayer"
+            }
+          ],
+          "name": "node-api-with-s3-layer-dev-create",
+          "package": {
+            "artifact": ".serverless\\create.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs22.x",
+          "vpc": {},
+          "versionLogicalId": "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo"
+        },
+        "read": {
+          "handler": "functions/read/handler.handler",
+          "events": [
+            {
+              "http": {
+                "path": "items",
+                "method": "get",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "layers": [
+            {
+              "Ref": "S3libLambdaLayer"
+            }
+          ],
+          "name": "node-api-with-s3-layer-dev-read",
+          "package": {
+            "artifact": ".serverless\\read.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs22.x",
+          "vpc": {},
+          "versionLogicalId": "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE"
+        },
+        "update": {
+          "handler": "functions/update/handler.handler",
+          "events": [
+            {
+              "http": {
+                "path": "items/{id}",
+                "method": "put",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "layers": [
+            {
+              "Ref": "S3libLambdaLayer"
+            }
+          ],
+          "name": "node-api-with-s3-layer-dev-update",
+          "package": {
+            "artifact": ".serverless\\update.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs22.x",
+          "vpc": {},
+          "versionLogicalId": "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw"
+        },
+        "delete": {
+          "handler": "functions/delete/handler.handler",
+          "events": [
+            {
+              "http": {
+                "path": "items/{id}",
+                "method": "delete",
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "layers": [
+            {
+              "Ref": "S3libLambdaLayer"
+            }
+          ],
+          "name": "node-api-with-s3-layer-dev-delete",
+          "package": {
+            "artifact": ".serverless\\delete.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs22.x",
+          "vpc": {},
+          "versionLogicalId": "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M"
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs22.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "CreateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-create"
+            }
+          },
+          "ReadLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-read"
+            }
+          },
+          "UpdateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-update"
+            }
+          },
+          "DeleteLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-delete"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "node-api-with-s3-layer",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*:*"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "node-api-with-s3-layer",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "S3libLambdaLayer": {
+            "Type": "AWS::Lambda::LayerVersion",
+            "Properties": {
+              "Content": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip"
+              },
+              "LayerName": "s3lib",
+              "CompatibleRuntimes": [
+                "nodejs22.x"
+              ]
+            }
+          },
+          "CreateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/create.zip"
+              },
+              "Handler": "functions/create/handler.handler",
+              "Runtime": "nodejs22.x",
+              "FunctionName": "node-api-with-s3-layer-dev-create",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "S3libLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "CreateLogGroup"
+            ]
+          },
+          "ReadLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/read.zip"
+              },
+              "Handler": "functions/read/handler.handler",
+              "Runtime": "nodejs22.x",
+              "FunctionName": "node-api-with-s3-layer-dev-read",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "S3libLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "ReadLogGroup"
+            ]
+          },
+          "UpdateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/update.zip"
+              },
+              "Handler": "functions/update/handler.handler",
+              "Runtime": "nodejs22.x",
+              "FunctionName": "node-api-with-s3-layer-dev-update",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "S3libLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "UpdateLogGroup"
+            ]
+          },
+          "DeleteLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+                "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/delete.zip"
+              },
+              "Handler": "functions/delete/handler.handler",
+              "Runtime": "nodejs22.x",
+              "FunctionName": "node-api-with-s3-layer-dev-delete",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "S3libLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "DeleteLogGroup"
+            ]
+          },
+          "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CreateLambdaFunction"
+              },
+              "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+            }
+          },
+          "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ReadLambdaFunction"
+              },
+              "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+            }
+          },
+          "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UpdateLambdaFunction"
+              },
+              "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+            }
+          },
+          "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "DeleteLambdaFunction"
+              },
+              "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-node-api-with-s3-layer",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceItems": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "items",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceItemsIdVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceItems"
+              },
+              "PathPart": "{id}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodItemsPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceItems"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CreateLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "CreateLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodItemsGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceItems"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ReadLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ReadLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodItemsIdVarPut": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "PUT",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceItemsIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UpdateLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "UpdateLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodItemsIdVarDelete": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "DELETE",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceItemsIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "DeleteLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "DeleteLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1754311091601": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodItemsPost",
+              "ApiGatewayMethodItemsGet",
+              "ApiGatewayMethodItemsIdVarPut",
+              "ApiGatewayMethodItemsIdVarDelete"
+            ]
+          },
+          "CreateLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CreateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ReadLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ReadLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UpdateLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UpdateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "DeleteLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "DeleteLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "S3libLambdaLayerQualifiedArn": {
+            "Description": "Current Lambda layer version",
+            "Value": {
+              "Ref": "S3libLambdaLayer"
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerQualifiedArn"
+            }
+          },
+          "S3libLambdaLayerHash": {
+            "Description": "Current Lambda layer hash",
+            "Value": "67b1e6372a715830705bd42ba1e2304e1f2cbdcd",
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerHash"
+            }
+          },
+          "S3libLambdaLayerS3Key": {
+            "Description": "Current Lambda layer S3Key",
+            "Value": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip",
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerS3Key"
+            }
+          },
+          "CreateLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo"
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-CreateLambdaFunctionQualifiedArn"
+            }
+          },
+          "ReadLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE"
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-ReadLambdaFunctionQualifiedArn"
+            }
+          },
+          "UpdateLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw"
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-UpdateLambdaFunctionQualifiedArn"
+            }
+          },
+          "DeleteLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M"
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-DeleteLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-node-api-with-s3-layer-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "service: node-api-with-s3-layer\r\n\r\nframeworkVersion: '^4.0.0'\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs22.x\r\n  region: us-east-1\r\n\r\npackage:\r\n  individually: true\r\n\r\nlayers:\r\n  s3lib:\r\n    path: layers/s3lib\r\n    name: s3lib\r\n    compatibleRuntimes:\r\n      - nodejs22.x \r\n\r\nfunctions:\r\n  create:\r\n    handler: functions/create/handler.handler\r\n    events:\r\n      - http:\r\n          path: items\r\n          method: post\r\n    layers:\r\n      - { Ref: S3libLambdaLayer }\r\n\r\n  read:\r\n    handler: functions/read/handler.handler\r\n    events:\r\n      - http:\r\n          path: items\r\n          method: get\r\n    layers:\r\n      - { Ref: S3libLambdaLayer }\r\n\r\n  update:\r\n    handler: functions/update/handler.handler\r\n    events:\r\n      - http:\r\n          path: items/{id}\r\n          method: put\r\n    layers:\r\n      - { Ref: S3libLambdaLayer }\r\n\r\n  delete:\r\n    handler: functions/delete/handler.handler\r\n    events:\r\n      - http:\r\n          path: items/{id}\r\n          method: delete\r\n    layers:\r\n      - { Ref: S3libLambdaLayer }\r\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "orgId": "f9d8f49f-e735-40e6-9c5e-ee9f609b6a70",
+    "orgName": "mashabear",
+    "userId": "m6hygzpF9yRwm46WbG",
+    "userName": "mashabear",
+    "serviceProviderAwsAccountId": "637423254719",
+    "serviceProviderAwsCfStackName": "node-api-with-s3-layer-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:637423254719:stack/node-api-with-s3-layer-dev/05129c40-7130-11f0-a1d6-0e3ecb9d5173",
+    "serviceProviderAwsCfStackCreated": "2025-08-04T12:39:10.737Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "S3libLambdaLayerHash",
+        "OutputValue": "67b1e6372a715830705bd42ba1e2304e1f2cbdcd",
+        "Description": "Current Lambda layer hash",
+        "ExportName": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerHash"
+      },
+      {
+        "OutputKey": "S3libLambdaLayerS3Key",
+        "OutputValue": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip",
+        "Description": "Current Lambda layer S3Key",
+        "ExportName": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerS3Key"
+      },
+      {
+        "OutputKey": "S3libLambdaLayerQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:637423254719:layer:s3lib:6",
+        "Description": "Current Lambda layer version",
+        "ExportName": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerQualifiedArn"
+      },
+      {
+        "OutputKey": "DeleteLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:637423254719:function:node-api-with-s3-layer-dev-delete:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-node-api-with-s3-layer-dev-DeleteLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "CreateLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:637423254719:function:node-api-with-s3-layer-dev-create:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-node-api-with-s3-layer-dev-CreateLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "UpdateLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:637423254719:function:node-api-with-s3-layer-dev-update:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-node-api-with-s3-layer-dev-UpdateLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://npe55dof21.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-node-api-with-s3-layer-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+        "ExportName": "sls-node-api-with-s3-layer-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "ReadLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:637423254719:function:node-api-with-s3-layer-dev-read:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-node-api-with-s3-layer-dev-ReadLambdaFunctionQualifiedArn"
+      }
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "CreateLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-create"
+          }
+        },
+        "ReadLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-read"
+          }
+        },
+        "UpdateLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-update"
+          }
+        },
+        "DeleteLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/node-api-with-s3-layer-dev-delete"
+          }
+        },
+        "IamRoleLambdaExecution": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "node-api-with-s3-layer",
+                      "dev",
+                      "lambda"
+                    ]
+                  ]
+                },
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "logs:TagResource"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/node-api-with-s3-layer-dev*:*:*"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "node-api-with-s3-layer",
+                  "dev",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  "lambdaRole"
+                ]
+              ]
+            }
+          }
+        },
+        "S3libLambdaLayer": {
+          "Type": "AWS::Lambda::LayerVersion",
+          "Properties": {
+            "Content": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip"
+            },
+            "LayerName": "s3lib",
+            "CompatibleRuntimes": [
+              "nodejs22.x"
+            ]
+          }
+        },
+        "CreateLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/create.zip"
+            },
+            "Handler": "functions/create/handler.handler",
+            "Runtime": "nodejs22.x",
+            "FunctionName": "node-api-with-s3-layer-dev-create",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            },
+            "Layers": [
+              {
+                "Ref": "S3libLambdaLayer"
+              }
+            ]
+          },
+          "DependsOn": [
+            "CreateLogGroup"
+          ]
+        },
+        "ReadLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/read.zip"
+            },
+            "Handler": "functions/read/handler.handler",
+            "Runtime": "nodejs22.x",
+            "FunctionName": "node-api-with-s3-layer-dev-read",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            },
+            "Layers": [
+              {
+                "Ref": "S3libLambdaLayer"
+              }
+            ]
+          },
+          "DependsOn": [
+            "ReadLogGroup"
+          ]
+        },
+        "UpdateLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/update.zip"
+            },
+            "Handler": "functions/update/handler.handler",
+            "Runtime": "nodejs22.x",
+            "FunctionName": "node-api-with-s3-layer-dev-update",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            },
+            "Layers": [
+              {
+                "Ref": "S3libLambdaLayer"
+              }
+            ]
+          },
+          "DependsOn": [
+            "UpdateLogGroup"
+          ]
+        },
+        "DeleteLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+              "S3Key": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/delete.zip"
+            },
+            "Handler": "functions/delete/handler.handler",
+            "Runtime": "nodejs22.x",
+            "FunctionName": "node-api-with-s3-layer-dev-delete",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            },
+            "Layers": [
+              {
+                "Ref": "S3libLambdaLayer"
+              }
+            ]
+          },
+          "DependsOn": [
+            "DeleteLogGroup"
+          ]
+        },
+        "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "CreateLambdaFunction"
+            },
+            "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+          }
+        },
+        "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "ReadLambdaFunction"
+            },
+            "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+          }
+        },
+        "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "UpdateLambdaFunction"
+            },
+            "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+          }
+        },
+        "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "DeleteLambdaFunction"
+            },
+            "CodeSha256": "hdVPDOIDKk/r0KcNHRmMScB8GiR4AjNhLAHOW+Kr/cE="
+          }
+        },
+        "ApiGatewayRestApi": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "dev-node-api-with-s3-layer",
+            "EndpointConfiguration": {
+              "Types": [
+                "EDGE"
+              ]
+            },
+            "Policy": ""
+          }
+        },
+        "ApiGatewayResourceItems": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "items",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayResourceItemsIdVar": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Ref": "ApiGatewayResourceItems"
+            },
+            "PathPart": "{id}",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodItemsPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceItems"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "CreateLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "CreateLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodItemsGet": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "GET",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceItems"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "ReadLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "ReadLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodItemsIdVarPut": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "PUT",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceItemsIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "UpdateLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "UpdateLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodItemsIdVarDelete": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "DELETE",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceItemsIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "DeleteLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "DeleteLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayDeployment1754311091601": {
+          "Type": "AWS::ApiGateway::Deployment",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          },
+          "DependsOn": [
+            "ApiGatewayMethodItemsPost",
+            "ApiGatewayMethodItemsGet",
+            "ApiGatewayMethodItemsIdVarPut",
+            "ApiGatewayMethodItemsIdVarDelete"
+          ]
+        },
+        "CreateLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "CreateLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "ReadLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "ReadLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "UpdateLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "UpdateLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "DeleteLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "DeleteLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": "serverless-framework-deployments-us-east-1-f0dcf084-85c2",
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "S3libLambdaLayerQualifiedArn": {
+          "Description": "Current Lambda layer version",
+          "Value": {
+            "Ref": "S3libLambdaLayer"
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerQualifiedArn"
+          }
+        },
+        "S3libLambdaLayerHash": {
+          "Description": "Current Lambda layer hash",
+          "Value": "67b1e6372a715830705bd42ba1e2304e1f2cbdcd",
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerHash"
+          }
+        },
+        "S3libLambdaLayerS3Key": {
+          "Description": "Current Lambda layer S3Key",
+          "Value": "serverless/node-api-with-s3-layer/dev/1754311110799-2025-08-04T12:38:30.799Z/s3lib.zip",
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-S3libLambdaLayerS3Key"
+          }
+        },
+        "CreateLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "CreateLambdaVersionaoPQmAjirTRFUwin2Ctd3LdZhKpnNnkoTaHbO5wRRGo"
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-CreateLambdaFunctionQualifiedArn"
+          }
+        },
+        "ReadLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "ReadLambdaVersionI9BToJQaGaymciHI1OurCfmZJhJpSxgWQtoYRE"
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-ReadLambdaFunctionQualifiedArn"
+          }
+        },
+        "UpdateLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "UpdateLambdaVersion7bMKrKYZD0PV0kDl4fi6xI6kFT3lhAcPvpcrii5Jw"
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-UpdateLambdaFunctionQualifiedArn"
+          }
+        },
+        "DeleteLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "DeleteLambdaVersionx1gGLXLniR8f8e2apiyL1bWvCFnJG7RVIISR9s1M"
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-DeleteLambdaFunctionQualifiedArn"
+          }
+        },
+        "ServiceEndpoint": {
+          "Description": "URL of the service endpoint",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                },
+                "/dev"
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-node-api-with-s3-layer-dev-ServiceEndpoint"
+          }
+        }
+      }
+    }
+  }
+}

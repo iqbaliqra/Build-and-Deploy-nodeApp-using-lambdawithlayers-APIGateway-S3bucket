@@ -167,7 +167,7 @@ Before you begin, ensure you have:
 - Create resources:  
   - /items → Methods: GET, POST  
   - /items/{id} → Methods: GET, PUT, DELETE  
-- Integrate each method with Lambda Function.  
+- Integrate each method with Lambda Function and Lambda proxy on otherwise event not pass to the lambda.  
 - Deploy API to Stage (e.g., prod).  
 - Copy the Invoke URL.  
 
